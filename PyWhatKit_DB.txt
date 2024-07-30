@@ -1,0 +1,6 @@
+Date: 30/7/2024
+Time: 12:35
+Phone Number: +919405720785
+Image: D:\Athar\Terra_spatial\ISRO_immersion_data\download.jpg
+Caption: This is a test image from pywhatkit!
+--------------------
