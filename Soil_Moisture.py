@@ -11,6 +11,7 @@ dataset = nc.Dataset(r"D:\Athar\Terra_spatial\ISRO_immersion_data\nices_ssm2_202
 lat = dataset.variables['latitude'][:]
 lon = dataset.variables['longitude'][:]
 soil_moisture = dataset.variables['soil_moisture'][:]
+# print(soil_moisture[60][70])
 
 # Replace fill values with NaN
 soil_moisture = np.where(soil_moisture == -9999.0, np.nan, soil_moisture)
