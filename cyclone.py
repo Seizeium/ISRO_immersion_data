@@ -1,54 +1,64 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+from scipy.interpolate import griddata
+from matplotlib.colors import ListedColormap, BoundaryNorm
 
-# Load the .dat file
-file_path = 'ISRO_immersion_data\c.dat'
+# Load the data
+file_path = '/mnt/c/Users/ASUS/Desktop/terraspatial/ISRO_immersion_data/c.dat'
 data = np.loadtxt(file_path)
 
-# Extract the relevant columns
-latitudes = data[:, 3]
-longitudes = data[:, 4]
-tchp_values = data[:, 5]
+# Extract latitude, longitude, and TCHP values
+lats = data[:, 3]
+lons = data[:, 4]
+tchp = data[:, 5]
 
-# Filter out invalid TCHP values
-valid_mask = np.isfinite(tchp_values)
-latitudes = latitudes[valid_mask]
-longitudes = longitudes[valid_mask]
-tchp_values = tchp_values[valid_mask]
+# Remove missing values indicated by -999.000
+valid_mask = tchp != -999.000
+lats = lats[valid_mask]
+lons = lons[valid_mask]
+tchp = tchp[valid_mask]
 
-# Create a grid for latitudes and longitudes
-lat_unique = np.unique(latitudes)
-lon_unique = np.unique(longitudes)
-lat_grid, lon_grid = np.meshgrid(lat_unique, lon_unique, indexing='ij')
+# Create a grid of latitude and longitude values
+lat_grid, lon_grid = np.meshgrid(np.unique(lats), np.unique(lons))
 
-# Initialize a grid with NaNs
-tchp_grid = np.full(lat_grid.shape, np.nan)
+# Interpolate TCHP values onto the grid
+tchp_grid = griddata((lats, lons), tchp, (lat_grid, lon_grid), method='linear')
 
-# Populate the grid with TCHP values
-for lat, lon, tchp in zip(latitudes, longitudes, tchp_values):
-    lat_idx = np.where(lat_unique == lat)[0][0]
-    lon_idx = np.where(lon_unique == lon)[0][0]
-    tchp_grid[lat_idx, lon_idx] = tchp
+# Define custom levels and colormap
+tchp_levels = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, np.nanmax(tchp_grid)]
 
-# Replace NaN values with 0
-tchp_grid = np.nan_to_num(tchp_grid, nan=0.0)
+# Define custom colors for each level range
+colors = [
+    '#0000FF', '#0064FF', '#00BFFF',      # 0-20
+    '#05FF50', '#05DC00', '#7CFC00',   # 30-50
+    '#FFFF00', '#FFD700',              # 60-70
+    '#FFA500', '#FA7800',               # 80-90
+    '#FF0A64', '#E60000', 'RED'                       # 100, >100
+]
 
-# Plotting
-plt.figure(figsize=(10, 8))
-contour = plt.contourf(lon_grid, lat_grid, tchp_grid, levels=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, np.inf], cmap='jet')
+cmap = ListedColormap(colors)
+norm = BoundaryNorm(tchp_levels, cmap.N)
 
-# Adding color bar
-cbar = plt.colorbar(contour, ticks=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
-cbar.set_label('TCHP (kJ/cm^2)')
+# Create the plot
+fig, ax = plt.subplots(subplot_kw={'projection': ccrs.PlateCarree()})
+ax.set_extent([30, 120, -30, 30], crs=ccrs.PlateCarree())
 
-# Adding labels and title
-plt.title('TCHP (kJ/cm^2) - 2024-02-14')
-plt.xlabel('Longitudes')
-plt.ylabel('Latitudes')
+# Create a contour plot for TCHP
+contour = ax.contourf(lon_grid, lat_grid, tchp_grid, levels=tchp_levels, cmap=cmap, norm=norm, transform=ccrs.PlateCarree(), zorder=1)
 
-# Set x and y axis limits
-plt.xlim(40, 120)
-plt.ylim(-30, 30)
+# Add features to the map (with a higher zorder to ensure they are on top)
+ax.add_feature(cfeature.LAND, edgecolor='black', zorder=2)
+ax.add_feature(cfeature.COASTLINE, zorder=3)
 
-# Show the plot
+# Add colorbar
+cbar = plt.colorbar(contour, ax=ax, orientation='horizontal', pad=0.05, aspect=50)
+cbar.set_label('TCHP (kJ/cm²)')
+
+# Add title
+plt.title('TCHP (kJ/cm²) - 2024-02-14')
+
+# Save and show the plot
+# plt.savefig('/mnt/data/tchp_visualization.png')
 plt.show()
