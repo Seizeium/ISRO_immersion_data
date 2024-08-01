@@ -20,8 +20,8 @@ WD = dataset.variables['WD'][0, :, :]
 U = -WS * np.sin(np.radians(WD))
 V = -WS * np.cos(np.radians(WD))
 
-# Adjust longitudes to be in the range 0 to 360 degrees
-longitude_adjusted = (longitude + 360) % 360
+# Adjust longitudes to be in the range -180 to 180 degrees
+longitude_adjusted = (longitude + 180) % 360 - 180
 
 # Subsample the data for faster plotting (e.g., every 20th point)
 subsample = 20
@@ -41,9 +41,9 @@ V_norm = V_sub / magnitude
 
 # Create the plot and projection
 fig = plt.figure(figsize=(15, 10))
-ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=180))
+ax = plt.axes(projection=ccrs.PlateCarree(central_longitude=0))
 
-ax.set_extent([0, 360, -90, 90], crs=ccrs.PlateCarree())
+ax.set_extent([-180, 180, -90, 90], crs=ccrs.PlateCarree())
 ax.coastlines()
 ax.add_feature(cfeature.LAND, zorder=0)
 
