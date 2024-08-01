@@ -2,16 +2,13 @@ import logging
 from flask import current_app, jsonify
 import json
 import requests
-
 #from app.services.openai_service import generate_response
 import re
-
 
 def log_http_response(response):
     logging.info(f"Status: {response.status_code}")
     logging.info(f"Content-type: {response.headers.get('content-type')}")
     logging.info(f"Body: {response.text}")
-
 
 def get_text_message_input(recipient, text):
     return json.dumps(
@@ -24,11 +21,79 @@ def get_text_message_input(recipient, text):
         }
     )
 
+def send_whatsapp_image():
+    url = "https://graph.facebook.com/v13.0/391717047356634/messages"
+    headers = {
+        "Authorization": "Bearer EAAMqtMoSZAi0BO2WBg26PMqxianlJAQMZBoTmKtxm3TUw233Wt4dvzjXwY4tiyRTx0BA2Yw28UxZAY7etXzieZAgTJA3JBSeD34zPZBwHZANnNpVn77vUUEmbe1qV6QBi35zSrBPHeZCr6MZAmJpDt8TCmW0iE1SbDLguiMZCJVRbDvJFqEXq680TipdlissKqnaJ2AUZBZCSX9p2cJzzjnfJi7gL3xxZBDVsOCyzC4ZD",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "messaging_product": "whatsapp",
+        "to": "+919405720785",
+        "type": "image",
+        "image": {
+            "link": "https://www.python.org/static/img/python-logo.png"
+        }
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    
+    if response.status_code == 200:
+        print("Message sent successfully")
+    else:
+        print(f"Failed to send message. Status code: {response.status_code}, Response: {response.text}")
+
+def request_user_location():
+    url = "https://graph.facebook.com/v13.0/391717047356634/messages"
+    headers = {
+        "Authorization": "Bearer EAAMqtMoSZAi0BO2WBg26PMqxianlJAQMZBoTmKtxm3TUw233Wt4dvzjXwY4tiyRTx0BA2Yw28UxZAY7etXzieZAgTJA3JBSeD34zPZBwHZANnNpVn77vUUEmbe1qV6QBi35zSrBPHeZCr6MZAmJpDt8TCmW0iE1SbDLguiMZCJVRbDvJFqEXq680TipdlissKqnaJ2AUZBZCSX9p2cJzzjnfJi7gL3xxZBDVsOCyzC4ZD",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "messaging_product": "whatsapp",
+        "to": "+919405720785",
+        "type": "interactive",
+        "interactive": {
+            "type": "button",
+            "body": {
+                "text": "Would you like to share your location with us?"
+            },
+            "action": {
+                "buttons": [
+                    {
+                        "type": "reply",
+                        "reply": {
+                            "id": "yes_location",
+                            "title": "Yes, share location"
+                        }
+                    },
+                    {
+                        "type": "reply",
+                        "reply": {
+                            "id": "no_location",
+                            "title": "No, thanks"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
+
+    response = requests.post(url, headers=headers, json=data)
+    
+    if response.status_code == 200:
+        print("Location request sent successfully")
+    else:
+        print(f"Failed to send location request. Status code: {response.status_code}, Response: {response.text}")
+
+
+
 
 def generate_response(response):
-    # Return text in uppercase
     text = "Length of your message: " + str(len(response))
     return text
+    
 
 
 def send_message(data):
@@ -56,7 +121,7 @@ def send_message(data):
         # Process the response as normal
         log_http_response(response)
         return response
-
+    
 
 def process_text_for_whatsapp(text):
     # Remove brackets
@@ -83,6 +148,7 @@ def process_whatsapp_message(body):
     message = body["entry"][0]["changes"][0]["value"]["messages"][0]
     message_body = message["text"]["body"]
 
+
     # TODO: implement custom function here
     response = generate_response(message_body)
 
@@ -106,3 +172,5 @@ def is_valid_whatsapp_message(body):
         and body["entry"][0]["changes"][0]["value"].get("messages")
         and body["entry"][0]["changes"][0]["value"]["messages"][0]
     )
+send_whatsapp_image()
+request_user_location()
