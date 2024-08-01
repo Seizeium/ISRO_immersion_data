@@ -7,7 +7,7 @@ from shapely.geometry import Point
 from shapely.prepared import prep
 
 # Load the dataset
-dataset_path = '/mnt/c/Users/ASUS/Downloads/NICES_EOS06_SCTL4WW_20240305/E06SCTL4WW_20240305_01_12km_v1.0.2.nc'
+dataset_path = 'NICES_EOS06_SCTL4WW_20240305 (1)\E06SCTL4WW_20240305_01_12km_v1.0.2.nc'
 dataset = Dataset(dataset_path)
 
 # Extract the necessary data

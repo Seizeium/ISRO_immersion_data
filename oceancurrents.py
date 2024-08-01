@@ -5,7 +5,7 @@ import cartopy.feature as cfeature
 from netCDF4 import Dataset
 
 # Load the dataset
-dataset_path = '/mnt/c/Users/ASUS/Downloads/nices_ekecg_20200923/SRLG_TSC_20200908_20200923.nc'
+dataset_path = 'ISRO_immersion_data\oceancurrents.nc'
 dataset = Dataset(dataset_path)
 
 # Read latitude, longitude, and Ekman currents data
