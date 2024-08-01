@@ -5,6 +5,7 @@ import requests
 #from app.services.openai_service import generate_response
 import re
 
+
 def log_http_response(response):
     logging.info(f"Status: {response.status_code}")
     logging.info(f"Content-type: {response.headers.get('content-type')}")
@@ -146,8 +147,20 @@ def process_whatsapp_message(body):
     name = body["entry"][0]["changes"][0]["value"]["contacts"][0]["profile"]["name"]
 
     message = body["entry"][0]["changes"][0]["value"]["messages"][0]
-    message_body = message["text"]["body"]
 
+    message_body = None
+
+    if message["type"] == "text":
+        message_body = message["text"]["body"]
+        print(f"Received text message from {name} ({wa_id}): {message_body}")
+    elif message["type"] == "location":
+        location = message["location"]
+        latitude = location["latitude"]
+        longitude = location["longitude"]
+        print(f"Received location from {name} ({wa_id}): Latitude: {latitude}, Longitude: {longitude}")
+    else:
+        message_body = None
+        print(f"Received unsupported message type from {name} ({wa_id})")
 
     # TODO: implement custom function here
     response = generate_response(message_body)
@@ -172,5 +185,5 @@ def is_valid_whatsapp_message(body):
         and body["entry"][0]["changes"][0]["value"].get("messages")
         and body["entry"][0]["changes"][0]["value"]["messages"][0]
     )
-send_whatsapp_image()
+#send_whatsapp_image()
 request_user_location()
