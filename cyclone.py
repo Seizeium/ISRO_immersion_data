@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Load the .dat file
-file_path = 'ISRO_immersion_data\c.dat'
+file_path = 'ISRO_immersion_data/c.dat'
 data = np.loadtxt(file_path)
 
 # Extract the relevant columns
