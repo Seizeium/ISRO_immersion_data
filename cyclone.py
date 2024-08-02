@@ -5,13 +5,8 @@ import cartopy.feature as cfeature
 from scipy.interpolate import griddata
 from matplotlib.colors import ListedColormap, BoundaryNorm
 
-<<<<<<< HEAD
 # Load the .dat file
 file_path = 'ISRO_immersion_data/c.dat'
-=======
-# Load the data
-file_path = '/mnt/c/Users/ASUS/Desktop/terraspatial/ISRO_immersion_data/c.dat'
->>>>>>> 9543c687093734f992afa67fe615b3f4a2023a24
 data = np.loadtxt(file_path)
 
 # Extract latitude, longitude, and TCHP values

@@ -7,7 +7,7 @@ from mpl_toolkits.basemap import Basemap
 import shapefile  # pyshp library for reading shapefiles
 
 # Load the netCDF file
-dataset = nc.Dataset(r"/mnt/c/Users/ASUS/Desktop/terraspatial/ISRO_immersion_data/soildata/LPRM-AMSR2_01T_L3_SM_D20240711.nc")
+dataset = nc.Dataset(r"C:\Terra_spatial\nices_ssm2_20240726\LPRM-AMSR2_01T_L3_SM_D20240711.nc")
 
 # Extract the data
 lat = dataset.variables['latitude'][:]
@@ -76,7 +76,7 @@ with rasterio.open('soil_moisture.tif') as src:
     cax = ax.pcolormesh(x, y, data, cmap=cmap, vmin=0, vmax=0.5)
 
 # Load and plot the shapefile
-sf = shapefile.Reader("/mnt/c/Users/ASUS/Desktop/terraspatial/ISRO_immersion_data/India3A_State_Boundary_2021_.shp")  # Update with the path to your shapefile
+sf = shapefile.Reader("C:\Terra_spatial\ISRO_immersion_data\India3A_State_Boundary_2021_.shp")  # Update with the path to your shapefile
 
 # Plot shapefile boundaries
 for shape in sf.shapeRecords():

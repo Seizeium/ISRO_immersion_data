@@ -6,8 +6,8 @@ import cartopy.io.shapereader as shpreader
 from rasterio.plot import show
 
 # Paths to the files
-rst_file_path = '/mnt/c/Users/ASUS/Desktop/terraspatial/ISRO_immersion_data/aw_scf_jan01to152024_03min_v01.rst'
-shapefile_path = '/mnt/c/Users/ASUS/Desktop/terraspatial/ISRO_immersion_data/India3A_State_Boundary_2021_.shp'
+rst_file_path = r"C:\Terra_spatial\ISRO_immersion_data\w_scf_jan01to152024_03min_v01.rst"
+shapefile_path = r"C:\Terra_spatial\ISRO_immersion_data\India3A_State_Boundary_2021_.shp"
 
 # Open and read the RST file
 with rasterio.open(rst_file_path) as src:
@@ -44,4 +44,4 @@ with rasterio.open(rst_file_path) as src:
     plt.title('Snow Cover Over South Asia')
 
     # Show the plot
-    plt.show()
+    # plt.show()

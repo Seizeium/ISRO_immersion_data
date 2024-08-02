@@ -6,7 +6,7 @@ import cartopy.feature as cfeature
 from matplotlib.colors import BoundaryNorm, LinearSegmentedColormap
 
 # Open the netCDF file
-file_path = '/mnt/c/Users/ASUS/Desktop/terraspatial/ISRO_immersion_data/Eddykinetic20230710.nc'  # Replace with your actual file path
+file_path = "C:\Terra_spatial\ISRO_immersion_data\Eddykinetic_20230710.nc"  # Replace with your actual file path
 nc_file = nc.Dataset(file_path, 'r')
 
 # Access the dimensions
@@ -38,7 +38,7 @@ colors = [
     "#003EFF", "#0065FF", "#008DFF", "#00B4FF", "#00DBFF", "#05FAFA", "#22FBDD", "#3FFCC0",
     "#5BFCA4", "#78FD87", "#95FD6A", "#B2FE4D", "#CEFF31", "#EBFF14", "#F8ED07", "#F9CB06",
     "#FAA905", "#FC8703", "#FD6602", "#FE4401", "#FF2200", "#F90700", "#D90400", "#B90200",
-    "#990000"
+    "#990000" 
 ]
 
 # Create a LinearSegmentedColormap from the list of colors
