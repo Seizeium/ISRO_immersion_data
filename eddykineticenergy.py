@@ -6,7 +6,7 @@ import cartopy.feature as cfeature
 from matplotlib.colors import BoundaryNorm, LinearSegmentedColormap
 
 # Open the netCDF file
-file_path = "C:\Terra_spatial\ISRO_immersion_data\Eddykinetic_20230710.nc"  # Replace with your actual file path
+file_path = "C:\\Terra_spatial\\ISRO_immersion_data\\Eddykinetic_20230710.nc"  # Replace with your actual file path
 nc_file = nc.Dataset(file_path, 'r')
 
 # Access the dimensions
@@ -25,12 +25,11 @@ longitude = lon
 latitude = lat
 eke_data = eke[0, :, :]  # Assuming time is the first dimension
 
-# Mask invalid data and clip to the max known value
+# Mask invalid data
 eke_data = np.ma.masked_invalid(eke_data)
-eke_data = np.ma.masked_greater(eke_data, 2200)  # Clip to 2200
 
 # Define the color scale based on the provided bounds
-bounds = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1500, 1600, 1700, 1800, 2000, 2200]
+bounds = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1500, 1600, 1700, 1800, 2000, 2200, 50000]
 
 # Create a custom rainbow colormap
 colors = [
